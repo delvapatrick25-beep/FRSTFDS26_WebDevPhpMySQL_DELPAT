@@ -128,6 +128,44 @@ ailleurs dans le code. Très utile pour les calculs.",
       foreach ($articles as $article) {
         afficherArticle($article);
       }
+
+
+      //  FONCTION : Triez les Articles par Date Decroissante
+      function sortByDate($articles)
+      {
+        usort($articles, function ($a, $b) {
+          return strtotime($b['date']) - strtotime($a['date']);
+        });
+
+        return $articles;
+      }
+
+      // Trier les articles
+      $trierArticles = sortByDate($articles);
+
+      // Limiter à 5 articles
+      $limitesArticles = array_slice($trierArticles, 0, 4);
+
+
+      // Afficher les articles
+      foreach ($limitesArticles as $article) {
+        echo "<h2>{$article['titre']}</h2>";
+        echo "<p><strong>Auteur :</strong> {$article['auteur']}</p>";
+        echo "<p><strong>Date :</strong> {$article['date']}</p>";
+        echo "<p>{$article['contenu']}</p>";
+        echo "<hr>";
+      }
+
+
+      // while ($article) {
+
+      //   echo "<h2>{$article['titre']}</h2>";
+      //   echo "<p><strong>Auteur :</strong> {$article['auteur']}</p>";
+      //   echo "<p><strong>Date :</strong> {$article['date']}</p>";
+      //   echo "<p>{$article['contenu']}</p>";
+      //   echo "<hr>";
+
+      // }
       ?>
 
 
@@ -164,7 +202,8 @@ ailleurs dans le code. Très utile pour les calculs.",
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Responsive Design</h5>
-              <p class="card-text">Votre blog doit s'adapter aux téléphones. CSS Media Queries le font automatiquement.</p>
+              <p class="card-text">Votre blog doit s'adapter aux téléphones. CSS Media Queries le font automatiquement.
+              </p>
               <a href="#" class="btn btn-primary">Lire plus</a>
             </div>
           </div>
