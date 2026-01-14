@@ -1,4 +1,7 @@
 <?php
+
+$categorieSelectionnee = isset($_GET['categorie']) ? $_GET['categorie'] : null;
+
 // ÉTAPE 1: Créer un tableau d'articles
 $articles = array(
   // Article 1
@@ -8,7 +11,8 @@ $articles = array(
     "contenu" => "Le PHP est un langage puissant pour le web. Aujourd'hui, je
 vais vous montrer comment afficher des données dynamiquement.",
     "auteur" => "Alice",
-    "date" => "2025-01-05"
+    "date" => "2025-01-05",
+    "categorie" => "Tutoriels"
   ),
   // Article 2
   array(
@@ -17,7 +21,9 @@ vais vous montrer comment afficher des données dynamiquement.",
     "contenu" => "Les boucles permettent de traiter plusieurs données sans
 répéter le code. Les fonctions organisent notre code.",
     "auteur" => "Bob",
-    "date" => "2025-01-08"
+    "date" => "2025-01-08",
+    "categorie" => "ressources"
+
   ),
 
   // Article 3
@@ -27,7 +33,8 @@ répéter le code. Les fonctions organisent notre code.",
     "contenu" => "Bootstrap rend le design facile et responsif. Pas besoin de
 CSS complexe pour créer un site professionnel.",
     "auteur" => "Charlie",
-    "date" => "2025-01-10"
+    "date" => "2025-01-10",
+    "categorie" => "Actualites"
   ),
 
   // Article 4
@@ -37,7 +44,8 @@ CSS complexe pour créer un site professionnel.",
     "contenu" => "Une fonction peut retourner une valeur pour l'utiliser
 ailleurs dans le code. Très utile pour les calculs.",
     "auteur" => "Alice",
-    "date" => "2025-01-12"
+    "date" => "2025-01-12",
+    "categorie" => "Tutoriels"
   )
 );
 
@@ -85,6 +93,7 @@ ailleurs dans le code. Très utile pour les calculs.",
 
 
       <?php
+
       function afficherArticle($article)
       {
         echo '<div class="col-md-4">';
@@ -125,10 +134,10 @@ ailleurs dans le code. Très utile pour les calculs.",
         return null;
       }
 
-      foreach ($articles as $article) {
-        afficherArticle($article);
-      }
-
+      // foreach ($articles as $article) {
+      //   afficherArticle($article);
+      // }
+      
 
       //  FONCTION : Triez les Articles par Date Decroissante
       function sortByDate($articles)
@@ -148,25 +157,90 @@ ailleurs dans le code. Très utile pour les calculs.",
 
 
       // Afficher les articles
-      foreach ($limitesArticles as $article) {
-        echo "<h2>{$article['titre']}</h2>";
-        echo "<p><strong>Auteur :</strong> {$article['auteur']}</p>";
-        echo "<p><strong>Date :</strong> {$article['date']}</p>";
-        echo "<p>{$article['contenu']}</p>";
-        echo "<hr>";
-      }
-
-
-      // while ($article) {
-
+      // foreach ($limitesArticles as $article) {
       //   echo "<h2>{$article['titre']}</h2>";
       //   echo "<p><strong>Auteur :</strong> {$article['auteur']}</p>";
       //   echo "<p><strong>Date :</strong> {$article['date']}</p>";
       //   echo "<p>{$article['contenu']}</p>";
       //   echo "<hr>";
-
       // }
+      
+      //       Partie 7 de L'exercice TP" 
+      
+      // //    Accedez a la categories
+//       // echo " voici la premier Article";
+//       // echo $articles[0]['categorie'];
+      
+
+      $categories = getCategoriesList($articles);
       ?>
+      <div class="mb-4">
+        <a href="index.php" class="btn btn-secondary me-2">Tous</a>
+
+        <?php foreach ($categories as $cat): ?>
+          <a href="?categorie=<?= urlencode($cat) ?>" class="btn btn-outline-primary me-2">
+            <?= htmlspecialchars($cat) ?>
+          </a>
+        <?php endforeach; ?>
+      </div>
+
+
+
+      <?php
+      $articlesFiltres = filterByCategory($articles, $categorieSelectionnee);
+
+      echo "<p><strong>" . count($articlesFiltres) . "</strong> article(s) trouvé(s)</p>";
+
+      foreach ($articlesFiltres as $article) {
+        afficherArticle($article);
+      }
+      ?>
+
+
+
+
+      // <!-- Partie 8 , 1.Creer une fonction Pour lister les categories Uniques -->
+      <?php
+      function getCategoriesList($articles)
+      {
+        $categories = [];
+
+        foreach ($articles as $article) {
+          if (!in_array($article['categorie'], $categories)) {
+            $categories[] = $article['categorie'];
+          }
+        }
+
+        return $categories;
+      }
+
+      // 2. Test du fonction en utilisant le print_r pour le formatage d'affichage
+      echo "test du tableau categorie";
+      echo "
+      <pre>";
+      print_r(getCategoriesList($articles));
+      echo "</pre>";
+
+      function filterByCategory($articles, $categorie)
+      {
+        if ($categorie === null) {
+          return $articles;
+        }
+
+        $resultat = [];
+
+        foreach ($articles as $article) {
+          if ($article['categorie'] === $categorie) {
+            $resultat[] = $article;
+          }
+        }
+
+        return $resultat;
+      }
+
+
+      ?>
+
 
 
 
